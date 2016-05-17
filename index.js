@@ -1,75 +1,35 @@
-var http = require('http');
-var OAuth = require('oauth').OAuth;
-var nodeUrl = require('url');
-var clientID = 'gfwAFD7PkmEh20UFgrhgX2KQo';
-var clientSecret = 'OaqKOxPEWhaRCosLb936l0N8KNbij15BfJOMINVpLuJ73AJ2zk';
-var callbackURL = '';
+var Twit = require('twit')
+var fs = require("fs");
+var config = require('./config');
 
-oa = new OAuth(
-    'https://api.twitter.com/oauth/request_token',
-    'https://api.twitter.com/oauth/access_token',
-    clientID,
-    clientSecret,
-    '1.0',
-    callbackURL,
-    'HMAC-SHA1'
-);
+// var T = new Twit({
+//     consumer_key: ,
+//     consumer_secret: ,
+//     access_token: ,
+//     access_token_secret: ,
+//     timeout_ms: 60 * 1000,  // optional HTTP request timeout to apply to all requests.
+// });
 
-http.createServer(function (request, response) {
-    oa.getOAuthRequestToken(function (error, oAuthToken, oAuthTokenSecret, results) {
-        var urlObj = nodeUrl.parse(request.url, true);
-        var authURL = 'https://twitter.com/' +
-                'oauth/authenticate?oauth_token=' + oAuthToken;
-        var handlers = {
-            '/': function (request, response) {
-                /**
-                 * Creating an anchor with authURL as href and sending as response
-                 */
-                var body = '<a href="' + authURL + '"> Get Code </a>';
-                response.writeHead(200, {
-                    'Content-Length': body.length,
-                    'Content-Type': 'text/html' });
-                response.end(body);
-            },
-            '/callback': function (request, response) {
-                /** Obtaining access_token */
-                var getOAuthRequestTokenCallback = function (error, oAuthAccessToken,
-                                                             oAuthAccessTokenSecret, results) {
-                    if (error) {
-                        console.log(error);
-                        response.end(JSON.stringify({
-                            message: 'Error occured while getting access token',
-                            error: error
-                        }));
-                        return;
-                    }
+//application-only
+var twit = new Twit({
+    consumer_key: config.consumer_key,
+    consumer_secret: config.consumer_secret,
+    app_only_auth: true,
+    timeout_ms: 6 * 1000,  // optional HTTP request timeout to apply to all requests.
+});
 
-                    oa.get('https://api.twitter.com/1.1/account/verify_credentials.json',
-                           oAuthAccessToken,
-                           oAuthAccessTokenSecret,
-                           function (error, twitterResponseData, result) {
-                               if (error) {
-                                   console.log(error)
-                                   res.end(JSON.stringify(error));
-                                   return;
-                               }
-                               try {
-                                   console.log(JSON.parse(twitterResponseData));
-                               } catch (parseError) {
-                                   console.log(parseError);
-                               }
-                               console.log(twitterResponseData);
-                               response.end(twitterResponseData);
-                           });
-                };
+//
+//  tweet 'hello world!'
+//
+// T.post('statuses/update', { status: 'hello world!' }, function(err, data, response) {
+//   console.log(data)
+// })
 
-                oa.getOAuthAccessToken(urlObj.query.oauth_token, oAuthTokenSecret,
-                                       urlObj.query.oauth_verifier,
-                                       getOAuthRequestTokenCallback);
+twit.get('search/tweets', { q: '蔡英文 since:2011-07-11', count: 1, lang: 'zh', include_entities: false }, function (err, data, response) {
 
-            }
-        };
-        handlers[urlObj.pathname](request, response);
-    })
+    console.log(data.statuses[0].user);
+   
+   
+    // console.log(data);
 
-}).listen(3000);
+});

@@ -2,3 +2,9 @@
 .vscode/
 #node modules
 node_modules/
+
+#config
+config.js
+#test file
+test.js
+
