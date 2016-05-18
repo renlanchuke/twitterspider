@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/renlanchuke/twitterspider#readme",
   "dependencies": {
+    "mongodb": "^2.1.19",
     "oauth": "^0.9.14",
     "url": "^0.11.0"
   }

@@ -1,6 +1,7 @@
 var Twit = require('twit')
 var fs = require("fs");
 var config = require('./config');
+var mongo=require('./mongoDB');
 
 // var T = new Twit({
 //     consumer_key: ,
@@ -25,9 +26,18 @@ var twit = new Twit({
 //   console.log(data)
 // })
 
-twit.get('search/tweets', { q: '蔡英文 since:2011-07-11', count: 1, lang: 'zh', include_entities: false }, function (err, data, response) {
+twit.get('search/tweets', { q: '蔡英文 since:2011-07-11', count: 100, lang: 'zh', include_entities: false }, function (err, data, response) {
 
-    console.log(data.statuses[0].user);
+    var nextURL=data.search_metadata.next_results;
+    var maxID=nextURL.substring(nextURL.indexOf('=')+1,nextURL.indexOf('&'));
+    for(var index in data.statuses){
+        mongo(data.statuses[index],null);
+        // console.log(object);
+    }
+    
+    console.log(maxID);
+    
+    console.log(data.search_metadata);
    
    
     // console.log(data);
