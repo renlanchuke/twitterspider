@@ -11,22 +11,62 @@ var url = 'mongodb://localhost:27017/mongoExp';
 var database;
 
 var init = function (callback) {
-    if (database) {
-        MongoClient.connect(url, function (err, db) {
-            if (err) callback(err)
-            logger.log('数据库连接成功');
-            database = db;
-        });
-    }
 
-    callback;
+    if (database) database.close();
+    MongoClient.connect(url, function (err, db) {
+        if (err) callback(err)
+        logger.log('数据库连接成功');
+        database = db;
+        callback();
+    });
+
 }
+
+exports.insertMany = function (collection, data, callback) {
+    database.collection(collection).insertMany(data, function (err, r) {
+        if (typeof callbaack == 'function') {
+            callback(err);
+        } else {
+            assert.equal(null, err);
+        }
+
+        callback(null, r);
+    });
+}
+
+exports.insertOne = function (collection, data, callback) {
+    database.collection(collection).insertOne(data, function (err, r) {
+        if (typeof callbaack == 'function') {
+            callback(err);
+        } else {
+            assert.equal(null, err);
+        }
+
+        callback(null, r);
+    });
+}
+
+exports.findAll = function (collection, filter, callbaack) {
+    if (!filter) filter = {};
+    database.collection(collection).find(filter).toArray(function (err, docs) {
+        if (typeof callbaack == 'function') {
+            callback(err);
+        } else {
+            assert.equal(null, err);
+        }
+        
+        callbaack(null,docs);
+    });
+}
+
 
 exports.test = function () {
     logger.log('okk');
     init((err) => {
         if (err) throw err;
-        logger.log(database);
+
+        database.close();
+        console.log(database);
     });
 }
 
