@@ -5,4 +5,4 @@ var data = {
     grade: '12'
 }
 
-mongo(data,null);
+mongo.test();
