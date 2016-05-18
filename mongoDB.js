@@ -10,6 +10,7 @@ var url = 'mongodb://localhost:27017/mongoExp';
 
 var database;
 
+//初始化，创建连接
 var init = function (callback) {
 
     if (database) database.close();
@@ -22,6 +23,7 @@ var init = function (callback) {
 
 }
 
+//插入多条数据
 exports.insertMany = function (collection, data, callback) {
     database.collection(collection).insertMany(data, function (err, r) {
         if (typeof callbaack == 'function') {
@@ -34,6 +36,7 @@ exports.insertMany = function (collection, data, callback) {
     });
 }
 
+//插入一条document
 exports.insertOne = function (collection, data, callback) {
     database.collection(collection).insertOne(data, function (err, r) {
         if (typeof callbaack == 'function') {
@@ -46,7 +49,8 @@ exports.insertOne = function (collection, data, callback) {
     });
 }
 
-exports.findAll = function (collection, filter, callbaack) {
+//读取数据
+exports.findAll = function (collection, filter, callback) {
     if (!filter) filter = {};
     database.collection(collection).find(filter).toArray(function (err, docs) {
         if (typeof callbaack == 'function') {
@@ -55,10 +59,17 @@ exports.findAll = function (collection, filter, callbaack) {
             assert.equal(null, err);
         }
         
-        callbaack(null,docs);
+        callback(null,docs);
     });
 }
 
+//关闭数据库
+exports.stop=function () {
+    database.close();
+    logger.log('数据库已关闭');
+}
+
+exports.init=init;
 
 exports.test = function () {
     logger.log('okk');
