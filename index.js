@@ -34,7 +34,7 @@ var options = {
     //  until: '2016-1-16',
     lang: 'zh',
     max_id:688143122870571008,
-    include_entities: true
+    include_entities: true-
 }
 
 /*****************
@@ -59,8 +59,7 @@ mongo.init((err) => {
     });
 });
 *********************/
-//688510937892929536
-//688507798804496384
+
 twit.get('statuses/show/:id', { id: '688490957004746753' }, function (err, data, response) {
   console.log(data)
 })

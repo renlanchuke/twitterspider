@@ -4,12 +4,13 @@ var request = require('request');
 var zlib = require('zlib');
 var config = require("./config");
 var logger = require("./logger");
+var self = require('./common');
 
 
 
 //////////////////网络访问部分
 
-var maxretry = 2;//请求如果出错的话，最大重试次数
+var maxretry = 3;//请求如果出错的话，最大重试次数
 
 //使用cookie访问页面
 exports.get = function (url, cookie, callback, retry) {
@@ -19,8 +20,8 @@ exports.get = function (url, cookie, callback, retry) {
         'Accept-Language': 'zh-CN',
         'User-Agent': 'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; WOW64; Trident/6.0)',
         'Connection': 'Keep-Alive',
-        'Accept-Encoding': 'gzip,deflate',     
-        'auth_token':'778DF829AAD63C67ED4CC77F63B0B4E5DA8064FA'
+        'Accept-Encoding': 'gzip,deflate',
+        'auth_token': '778DF829AAD63C67ED4CC77F63B0B4E5DA8064FA'
     };
 
     request({
@@ -30,7 +31,7 @@ exports.get = function (url, cookie, callback, retry) {
         encoding: null
     },
         function (error, response, data) {
-           // console.log("error: "+error);
+            // console.log("error: "+error);
             if (!error && response.statusCode == 200) {
 
                 var buffer = new Buffer(data);
@@ -52,8 +53,11 @@ exports.get = function (url, cookie, callback, retry) {
             else {
                 //小于错误次数则重试
                 if (retry < maxretry) {
-                    logger.debug("retry getting url : " + url);
-                    self.get(url, cookie, callback, retry + 1);
+                    logger.log("retry getting url : " + url);
+                    setTimeout(function () {
+                        self.get(url, cookie, callback, retry + 1);
+                    }, 3000);
+
                 }
                 else
                     callback(error || response.statusCode);

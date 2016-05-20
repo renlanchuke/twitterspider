@@ -39,7 +39,7 @@ function gettwitterid(lastNoteTS, maxPosition) {
             var id = $(this).data('tweet-id');
             twitterIDArray.push({ twitter_id: id, download: false });
         }),
-            mongo.insertMany('twitterID', twitterIDArray, (err, result) => {
+            mongo.insertMany('twitter_id_second', twitterIDArray, (err, result) => {
                 logger.log('成功插入' + result.insertedCount + '条数据');
             });
         // console.log(twitterIDArray)
