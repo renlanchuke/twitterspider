@@ -1,8 +1,8 @@
 var Twit = require('twit')
 var fs = require("fs");
 var config = require('./config');
-var mongo=require('./mongoDB');
-var logger=require('./logger');
+var mongo = require('./mongoDB');
+var logger = require('./logger');
 
 // var T = new Twit({
 //     consumer_key: ,
@@ -27,20 +27,40 @@ var twit = new Twit({
 //   console.log(data)
 // })
 
-twit.get('search/tweets', { q: '蔡英文 since:2011-07-11', count: 100, lang: 'zh', include_entities: false }, function (err, data, response) {
+var options = {
+    q: '蔡英文',
+    count: 10,
+    //  since: '2016-1-14',
+    //  until: '2016-1-16',
+    lang: 'zh',
+    max_id:688143122870571008,
+    include_entities: true
+}
 
-    var nextURL=data.search_metadata.next_results;
-    var maxID=nextURL.substring(nextURL.indexOf('=')+1,nextURL.indexOf('&'));
-    for(var index in data.statuses){
-        mongo(data.statuses[index],null);
-        // console.log(object);
-    }
-    
-    console.log(maxID);
-    
-    console.log(data.search_metadata);
-   
-   
-    // console.log(data);
+/*****************
+mongo.init((err) => {
+    if (err) throw err;
 
+    twit.get('search/tweets', options, function (err, data, response) {
+        if (err) throw err;
+        // var nextURL = data.search_metadata.next_results;
+        // var maxID = nextURL.substring(nextURL.indexOf('=') + 1, nextURL.indexOf('&'));
+        // mongo.insertMany('collects', data.statuses)
+
+        console.log(data.statuses);
+
+        // console.log(maxID);
+
+        console.log(data.search_metadata);
+        // console.log(response);
+
+        // console.log(data);
+        mongo.stop();
+    });
 });
+*********************/
+//688510937892929536
+//688507798804496384
+twit.get('statuses/show/:id', { id: '688490957004746753' }, function (err, data, response) {
+  console.log(data)
+})

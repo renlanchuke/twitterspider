@@ -27,3 +27,5 @@ mongo.init(function (err) {
         });
     });
 });
+
+// 'https://twitter.com/i/search/timeline?vertical=news&q=蔡英文 since:2016-01-14 until:2016-01-16&src=typd&composed_count=0&include_available_features=1&include_entities=1&include_new_items_bar=true&interval=30000&last_note_ts=1463306923&latent_count=0&min_position=TWEET-688143122870571008-688148609301229568-BD1UO2FFu9QAAAAAAAAETAAAAAcAAAASAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA'

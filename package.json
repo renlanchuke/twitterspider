@@ -21,8 +21,10 @@
   },
   "homepage": "https://github.com/renlanchuke/twitterspider#readme",
   "dependencies": {
+    "cheerio": "^0.20.0",
     "mongodb": "^2.1.19",
     "oauth": "^0.9.14",
+    "request": "^2.72.0",
     "url": "^0.11.0"
   }
 }
