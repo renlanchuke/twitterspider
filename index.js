@@ -34,7 +34,7 @@ var options = {
     //  until: '2016-1-16',
     lang: 'zh',
     max_id:688143122870571008,
-    include_entities: true-
+    include_entities: true
 }
 
 /*****************

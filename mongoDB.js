@@ -26,12 +26,13 @@ var init = function (callback) {
 //插入多条数据
 exports.insertMany = function (collection, data, callback) {
     database.collection(collection).insertMany(data, function (err, r) {
-        if (typeof callbaack == 'function') {
-            callback(err);
-        } else {
-            assert.equal(null, err);
+        if (err) {
+            if (typeof callback == 'function') {
+                callback(err);
+            } else {
+                assert.equal(null, err);
+            }
         }
-
         callback(null, r);
     });
 }
@@ -39,11 +40,14 @@ exports.insertMany = function (collection, data, callback) {
 //插入一条document
 exports.insertOne = function (collection, data, callback) {
     database.collection(collection).insertOne(data, function (err, r) {
-        if (typeof callbaack == 'function') {
-            callback(err);
-        } else {
-            assert.equal(null, err);
+        if (err) {
+            if (typeof callback == 'function') {
+                callback(err);
+            } else {
+                assert.equal(null, err);
+            }
         }
+
 
         callback(null, r);
     });
@@ -53,23 +57,40 @@ exports.insertOne = function (collection, data, callback) {
 exports.findAll = function (collection, filter, callback) {
     if (!filter) filter = {};
     database.collection(collection).find(filter).toArray(function (err, docs) {
-        if (typeof callbaack == 'function') {
-            callback(err);
-        } else {
-            assert.equal(null, err);
+        if (err) {
+            if (typeof callback == 'function') {
+                callback(err);
+            } else {
+                assert.equal(null, err);
+            }
         }
-        
-        callback(null,docs);
+
+        callback(null, docs);
+    });
+}
+
+//修改数据
+exports.updateOne = function (collection, filter, set, callback) {
+    if (!filter) filter = {};
+    database.collection(collection).updateOne(filter, { $set: set }, (err, result) => {
+        if (err) {
+            if (typeof callback == 'function') {
+                callback(err);
+            } else {
+                assert.equal(null, err);
+            }
+        }
+        callback(null, result,filter,set);
     });
 }
 
 //关闭数据库
-exports.stop=function () {
+exports.stop = function () {
     database.close();
     logger.log('数据库已关闭');
 }
 
-exports.init=init;
+exports.init = init;
 
 exports.test = function () {
     logger.log('okk');

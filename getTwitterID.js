@@ -29,8 +29,11 @@ function gettwitterid(lastNoteTS, maxPosition) {
     common.get(currURL, null, (err, data) => {
         if (err) throw err;
         var json = JSON.parse(data);
-        if (json.new_latent_count < 1)
+        if (json.new_latent_count < 1 || json.new_latent_count==undefined){
+            logger.log("获取用户ID结束");
             return;
+        }
+            
         var twitterIDArray = new Array();
         var $ = cheerio.load(json.items_html, { decodeEntities: false });
         var cards = $('.js-original-tweet');
@@ -39,7 +42,7 @@ function gettwitterid(lastNoteTS, maxPosition) {
             var id = $(this).data('tweet-id');
             twitterIDArray.push({ twitter_id: id, download: false });
         }),
-            mongo.insertMany('twitter_id_second', twitterIDArray, (err, result) => {
+            mongo.insertMany('twitter_id_three', twitterIDArray, (err, result) => {
                 logger.log('成功插入' + result.insertedCount + '条数据');
             });
         // console.log(twitterIDArray)
