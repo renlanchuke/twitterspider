@@ -24,30 +24,43 @@ var cursor = new GetCursor();
 mongo.init(function (err) {
     if (err) throw err;
 
-    mongo.findAll('twitterID', { download: false }, (err, docs) => {
+    mongo.findAll('twitter_id_second', { download: false }, (err, docs) => {
         if (err) throw err;
         var length = docs.length;
         console.log('docs length: ', length);
-        while (length--) {
-            var nextCursor = cursor.getCursor();
-            mongo.updateOne('twitterID', 
-            {"twitter_id": docs[nextCursor].twitter_id}, 
-            {"download": true }, 
-            (err, result,filter) => {
-                if (err) throw err;
-                console.log('修改数据成功 ',filter);
-            });
-            console.log(docs[nextCursor]);
-            console.log(nextCursor);
-            if (nextCursor > 10)
-                break;
-        }
+        var firstCursor = cursor.getCursor();
+        getTwitter(firstCursor, docs, length);
         // console.log(docs);
-
     });
 });
 
 
+function getTwitter(cur, docs, len) {
+    var id = docs[cur].twitter_id;
+    if (cur < len) {
+        twit.get('statuses/show/:id', { id: id }, function (err, data, response) {
+            if (err) {
+                logger.log(err);
+                setTimeout(function () {
+                    getTwitter(cur, docs, len);
+                }, 10000);
+            } else {
+                mongo.insertOne('twitterColl', data, (err, result) => {
+                    if (err) throw err;
+                    mongo.updateOne('twitter_id_second',
+                        { "twitter_id": id },
+                        { "download": true },
+                        (err, result, filter) => {
+                            if (err) throw err;
+                            console.log('成功获取第' + cur + '条数据');
+                        });
+                });
+                var nextCursor = cursor.getCursor();
+                getTwitter(nextCursor, docs, len);
+            }
+        });
+    }
+}
 
 function GetCursor() {
     this._cursor = -1;
