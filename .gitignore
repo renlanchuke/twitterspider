@@ -8,3 +8,7 @@ config.js
 #test file
 test.js
 
+#json data
+twitters.json
+
+

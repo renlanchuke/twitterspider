@@ -65,14 +65,34 @@ exports.get = function (url, cookie, callback, retry) {
         });
 }
 
-//将json如文件
-exports.saveJson = function (fileLocation,json, callback) {
+//将json写入文件文件
+exports.saveJson = function (fileLocation, json, callback) {
     fs.writeFile(fileLocation, JSON.stringify(json), (err) => {
         if (err) throw err;
         console.log('It\'s saved!');
     });
 
 }
+
+//json array 写入文件
+exports.saveJsonArray = function (fileLocation, jsonArray, callback) {
+    var stringArray = new Array();
+    jsonArray.forEach(function (element) {
+        stringArray.push(JSON.stringify(element));
+    }, this);
+
+    stringArray = '[' + stringArray.join(',') + ']';
+
+    fs.writeFile(fileLocation, stringArray, (err) => {
+        if (err) callback(err);
+        logger.log('成功写入' + jsonArray.length + '个对象到' + 'fileLocation' + '中');
+        callback(null);
+    });
+
+
+    
+}
+
 
 
 //时间格式化输出

@@ -1,4 +1,5 @@
 var mongo = require('./mongoDB');
+var common=require('./common');
 
 /********
  * 数据库测试
@@ -15,8 +16,8 @@ var data = [
 ]
 
 var cursor = new GetCursor();
-mongo.init(function (err) {
-    if (err) throw err;
+// mongo.init(function (err) {
+//     if (err) throw err;
 
     // mongo.insertMany('students', data, (err, result) => {
     //     if (err) throw err;
@@ -35,13 +36,16 @@ mongo.init(function (err) {
     // });
 
     //test updateMany
-    mongo.updateMany('twitter_id_second', { 'download': true }, { 'download': false }, (err, result) => {
-        console.log(result.matchedCount);
-        console.log(result.modifiedCount);
-        mongo.stop();
-    })
-});
+//     mongo.updateMany('twitter_id_second', { 'download': true }, { 'download': false }, (err, result) => {
+//         console.log(result.matchedCount);
+//         console.log(result.modifiedCount);
+//         mongo.stop();
+//     });
+// });
 
+//test saveJsonArray
+
+common.saveJsonArray('1q2.json',data,null);
 
 function GetCursor() {
     this._cursor = -1;
