@@ -69,10 +69,25 @@ exports.findAll = function (collection, filter, callback) {
     });
 }
 
-//修改数据
+//修改数据单一数据
 exports.updateOne = function (collection, filter, set, callback) {
     if (!filter) filter = {};
     database.collection(collection).updateOne(filter, { $set: set }, (err, result) => {
+        if (err) {
+            if (typeof callback == 'function') {
+                callback(err);
+            } else {
+                assert.equal(null, err);
+            }
+        }
+        callback(null, result,filter,set);
+    });
+}
+
+//修改多条数据
+exports.updateMany = function (collection, filter, set, callback) {
+    if (!filter) filter = {};
+    database.collection(collection).updateMany(filter, { $set: set }, (err, result) => {
         if (err) {
             if (typeof callback == 'function') {
                 callback(err);
@@ -92,13 +107,5 @@ exports.stop = function () {
 
 exports.init = init;
 
-exports.test = function () {
-    logger.log('okk');
-    init((err) => {
-        if (err) throw err;
 
-        database.close();
-        console.log(database);
-    });
-}
 
