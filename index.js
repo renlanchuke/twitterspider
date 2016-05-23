@@ -29,14 +29,17 @@ var twit = new Twit({
 
 var options = {
     q: '蔡英文',
-    count: 10,
-    //  since: '2016-1-14',
-    //  until: '2016-1-16',
     lang: 'zh',
-    max_id:688143122870571008,
-    include_entities: true
+    since: '2016-1-14',
+    until: '2016-1-16'
 }
 
+var query = 'https://twitter.com/i/search/timeline?vertical=default&' +
+    'q=%E8%94%A1%E8%8B%B1%E6%96%87%20lang%3Azh%20since%3A2016-01-14%20until%3A2016-01-17&src=typd'
+
+// console.log(decodeURI(query));
+var encodedurl = handleUrl(options);
+console.log(encodedurl);
 /*****************
 mongo.init((err) => {
     if (err) throw err;
@@ -60,6 +63,21 @@ mongo.init((err) => {
 });
 *********************/
 
-twit.get('statuses/show/:id', { id: '688490957004746753' }, function (err, data, response) {
-  console.log(data)
-})
+function handleUrl(query) {
+    var urlString = new String();
+    for (var key in query) {
+        if (urlString.length != 0) {
+            urlString = urlString + ' ';
+        }
+
+        if (key == 'q') {
+            urlString = query[key];
+        } else {
+            urlString = urlString + key + ":" + query[key];
+        }
+
+
+        // console.log(urlString);
+    }
+    return 'q=' + encodeURIComponent(urlString)
+}
