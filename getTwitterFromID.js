@@ -36,8 +36,8 @@ mongo.init(function (err) {
 
 
 function getTwitter(cur, docs, len) {
-    var id = docs[cur].twitter_id;
     if (cur < len) {
+        var id = docs[cur].twitter_id;
         twit.get('statuses/show/:id', { id: id }, function (err, data, response) {
             if (err) {
                 logger.log(err);

@@ -65,12 +65,21 @@ exports.get = function (url, cookie, callback, retry) {
         });
 }
 
+//将json如文件
+exports.saveJson = function (fileLocation,json, callback) {
+    fs.writeFile(fileLocation, JSON.stringify(json), (err) => {
+        if (err) throw err;
+        console.log('It\'s saved!');
+    });
+
+}
+
+
 //时间格式化输出
 exports.getDateString = function (date) {
     if (!date) {
         date = new Date();
     }
-
     var year = date.getFullYear().toString();
     var month = date.getMonth().toString();
     var day = date.getDate().toString();
