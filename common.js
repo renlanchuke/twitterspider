@@ -5,6 +5,7 @@ var zlib = require('zlib');
 var config = require("./config");
 var logger = require("./logger");
 var self = require('./common');
+var json2csv = require('json2csv')
 
 
 
@@ -85,12 +86,22 @@ exports.saveJsonArray = function (fileLocation, jsonArray, callback) {
 
     fs.writeFile(fileLocation, stringArray, (err) => {
         if (err) callback(err);
-        logger.log('成功写入' + jsonArray.length + '个对象到' + 'fileLocation' + '中');
+        logger.log('成功写入' + jsonArray.length + '个对象到' + fileLocation + '中');
         callback(null);
     });
 
+}
 
-    
+//将json转换为csv保存
+exports.saveJson2csv = function (fileLocation, jsonArray, fields, callback) {
+    json2csv({ data: jsonArray, fields: fields }, function (err, csv) {
+        if (err) callback(err);
+        fs.writeFile(fileLocation, csv, (err) => {
+            if (err) callback(err);
+            logger.log('成功写入' + jsonArray.length + '个对象到' + fileLocation + '中');
+            callback(null);
+        });
+    });
 }
 
 

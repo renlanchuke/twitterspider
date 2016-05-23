@@ -23,6 +23,7 @@
   "dependencies": {
     "cheerio": "^0.20.0",
     "forever": "^0.15.1",
+    "json2csv": "^3.4.2",
     "mongodb": "^2.1.19",
     "oauth": "^0.9.14",
     "request": "^2.72.0",
