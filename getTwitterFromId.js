@@ -21,33 +21,45 @@ var twit = new Twit({
 });
 
 var cursor = new GetCursor();
-mongo.init(function (err) {
-    if (err) throw err;
 
-    mongo.findAll('twitter_id_second', { download: false }, (err, docs) => {
+/****
+ * @IdCollection 读取id的collection
+ * @twitterCollection 将获取的twitter信息保存到此collection
+ * *********** */
+var IdCollection;
+var twitterCollection;
+exports.getTwitter = function (IdColl, twitterColl) {
+    IdCollection = IdColl;
+    twitterCollection = twitterColl;
+    mongo.init(function (err) {
         if (err) throw err;
-        var length = docs.length;
-        console.log('docs length: ', length);
-        var firstCursor = cursor.getCursor();
-        getTwitter(firstCursor, docs, length);
-        // console.log(docs);
-    });
-});
 
+        mongo.findAll(IdCollection, { download: false }, (err, docs) => {
+            if (err) throw err;
+            var length = docs.length;
+            console.log('docs length: ', length);
+            var firstCursor = cursor.getCursor();
+            getTwitter(firstCursor, docs, length);
+            // console.log(docs);
+        });
+    });
+}
 
 function getTwitter(cur, docs, len) {
     if (cur < len) {
         var id = docs[cur].twitter_id;
         twit.get('statuses/show/:id', { id: id }, function (err, data, response) {
+
             if (err) {
                 logger.log(err);
                 setTimeout(function () {
                     getTwitter(cur, docs, len);
                 }, 10000);
+
             } else {
-                mongo.insertOne('twitterColl', data, (err, result) => {
+                mongo.insertOne(twitterCollection, data, (err, result) => {
                     if (err) throw err;
-                    mongo.updateOne('twitter_id_second',
+                    mongo.updateOne(IdCollection,
                         { "twitter_id": id },
                         { "download": true },
                         (err, result, filter) => {
