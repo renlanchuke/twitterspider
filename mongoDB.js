@@ -97,13 +97,13 @@ exports.updateMany = function (collection, filter, set, callback) {
         }
         callback(null, result,filter,set);
     });
-}
+};
 
 //关闭数据库
 exports.stop = function () {
     database.close();
     logger.log('数据库已关闭');
-}
+};
 
 exports.init = init;
 

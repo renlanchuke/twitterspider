@@ -10,7 +10,7 @@ saveJson2csv();
 function test() {
     mongo.init(function (err) {
         if (err) throw err;
-        mongo.findAll('twitter_id_second', {}, (err, docs) => {
+        mongo.findAll('twitter_one', {}, (err, docs) => {
             if (err) throw err;
             var length = docs.length;
             console.log('docs length: ', length);
@@ -68,7 +68,7 @@ function saveJson2csv() {
     mongo.init(function (err) {
         if (err) throw err;
 
-        mongo.findAll('twitterColl', {}, (err, docs) => {
+        mongo.findAll('twitters_1214_1222', {}, (err, docs) => {
             if (err) throw err;
 
             var jsonSimp = new Array();
@@ -76,17 +76,15 @@ function saveJson2csv() {
             docs.forEach(function (element) {
                 jsonSimp.push(
                     {
-                        'id': element.id_str,
-                        'created_date': element.created_at,
-                        'text': element.text,
-                        'retweet_count': element.retweet_count,
-                        'retweeted': element.retweeted
+                        'user': element.userName,
+                        'text': element.content,
+                        'date': element.time
                     }
                 );
             }, this);
 
-            var fields = ['id', 'created_date', 'retweet_count', 'retweeted', 'text']
-            common.saveJson2csv('twitters.csv', jsonSimp, fields, (err) => {
+            var fields = ['user','text','date'];
+            common.saveJson2csv('twitters_1214_1221.csv', jsonSimp, fields, (err) => {
                 if (err) throw err;
             });
 

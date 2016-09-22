@@ -1,4 +1,4 @@
-var Twit = require('twit')
+var Twit = require('twit');
 var fs = require("fs");
 var config = require('./config');
 var mongo = require('./mongoDB');

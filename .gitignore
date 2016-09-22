@@ -11,4 +11,7 @@ test.js
 #json data
 twitters.json
 
+#twitter data
+twitters_*
+
 

@@ -8,11 +8,11 @@ var last_note_ts = 1463307756;
 var queryOptions = {
     q: '蔡英文',
     lang: 'zh',
-    since: '2016-1-14',
-    until: '2016-1-16'
+    since: '2016-01-07',
+    until: '2016-01-16'
 }
 
-var max_position = 'max_position=TWEET-688517798804496384-688520937892929536-BD1UO2FFu9QAAAAAAAAETAAAAAcAAAASAAAAAA' +
+var max_position = 'max_position=TWEET-688139954212372484-688148609301229568-BD1UO2FFu9QAAAAAAAAETAAAAAcAAAASAAAAAA' +
     'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA' +
     'AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA';
 
@@ -54,8 +54,35 @@ function gettwitterid(lastNoteTS, maxPosition) {
         var cards = $('.js-original-tweet');
 
         cards.each(function (i) {
+            //console.log($(this).html());
             var id = $(this).data('tweet-id');
-            twitterIDArray.push({ twitter_id: id, download: false });
+            //new attribute
+            var userID = $(this).data('user-id');
+            var userName = $(this).data('name');
+            //var time=$(this).find('.time').text();
+            var time_ms = $(this).find('._timestamp').data('time-ms');
+
+
+            var time = new Date(time_ms);
+            //console.log(time);
+            //var content=$(this).children('.content').children('.js-tweet-text-container').text();
+            var content = $(this).find('.js-tweet-text-container').text();
+
+
+            content = content.trim();
+            var record = {
+                id: id,
+                time: time,
+                userID: userID,
+                userName: userName,
+                content: content,
+                tag:false
+            };
+
+            //console.log(record);
+
+
+            twitterIDArray.push(record);
         }),
             mongo.insertMany(IdCollection, twitterIDArray, (err, result) => {
                 logger.log('成功插入' + result.insertedCount + '条数据');
@@ -73,7 +100,7 @@ function gettwitterid(lastNoteTS, maxPosition) {
 function handleQuery(query) {
     var urlString = new String();
     for (var key in query) {
-        if (urlString.length != 0) {
+        if (urlString.length !== 0) {
             urlString = urlString + ' ';
         }
 
