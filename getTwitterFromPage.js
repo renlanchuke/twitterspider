@@ -29,7 +29,7 @@ var lpara = '&reset_error_state=false';
 //mongodb数据库collection，存放抓取的twitter Id
 var IdCollection;
 
-exports.getTwitterId = function (collection) {
+exports.getTwitters = function (collection) {
     IdCollection = collection;
     mongo.init((err) => {
         if (err) throw err;

@@ -1,6 +1,7 @@
 var mongo = require('./mongoDB');
 var common = require('./common');
-var Twit = require('twit')
+var Twit = require('twit');
+var net = require('net')
 
 /********
  * 数据库测试
@@ -44,7 +45,10 @@ var Twit = require('twit')
 //     });
 // });
 
-//test saveJsonArray
+/******************
+ * 测试saveJsonArray
+ * **************** */
+
 
 // common.saveJsonArray('1q2.json',data,null);
 
@@ -56,16 +60,41 @@ var Twit = require('twit')
 //     }
 // }
 
-var T = new Twit({
-    consumer_key: "1065730562@qq.com", consumer_secret: "7151471503", app_only_auth: true
-});
+/*****************
+ * 测试twitt
+ * ************** */
+// var T = new Twit({
+//     consumer_key: "**********", consumer_secret: "****", app_only_auth: true
+// });
 
-T.get('statuses/show/:id', { id: '688517798804496384' }, function (err, data, response) {
+// T.get('statuses/show/:id', { id: '688517798804496384' }, function (err, data, response) {
 
-    if (err) {
-        console.log(err);
+//     if (err) {
+//         console.log(err);
 
-    } else {
-        console.log(data);
-    }
-});
+//     } else {
+//         console.log(data);
+//     }
+// });
+
+
+/*****************
+ * 测试端口是否占用
+ * ************** */
+
+function portIsOccupied(port) {
+    var server = net.createServer().listen(port)
+
+    server.on('listening', function () {
+        server.close()
+        console.log("The port :" + port + " is available")
+    })
+
+    server.on('error', function (err) {
+        if (err.code = 'EADDRINUSE') {
+            console.log('The port :' + port + ' is occupied change other port')
+        }
+    })
+}
+
+portIsOccupied(27017);
