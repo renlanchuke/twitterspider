@@ -21,17 +21,17 @@ var page = 1;
 var formData2 = {
     searchMode: "",
     searchType: "text",
-    ExtFilter: "[twapple+TO+twapple_sub]",
+    ExtFilter: "[twapple TO twapple_sub]",
     sorttype: "1",
-    ketword: "蔡英文",
-    rangedate: "[20151214+TO+20160115999:99]",
+    keyword: "蔡英文",
+    rangedate: "[20151214 TO 20160115999:99]",
     totalpage: "276",
-    page: '7'
+    page: "1"
 };
 
 
 exports.getArticles = function () {
-    common.getContent(url, formData, function (err, fileContent) {
+    common.getContent(url, formData2, function (err, fileContent) {
         if (err) throw err;
         fs.writeFile("./testFile2", fileContent, (err) => {
             if (err) throw err;
