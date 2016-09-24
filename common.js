@@ -66,6 +66,60 @@ exports.get = function (url, cookie, callback, retry) {
         });
 }
 
+//用form訪問
+exports.getContent = function (url, form, callback, retry) {
+    if (!retry) retry = 0;
+    var headers = {
+        'Accept': 'text/html, application/xhtml+xml, */*',
+        'Accept-Language': 'zh-CN',
+        'User-Agent': 'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; WOW64; Trident/6.0)',
+        'Connection': 'Keep-Alive',
+        'Accept-Encoding': 'gzip,deflate'
+        //'auth_token': '778DF829AAD63C67ED4CC77F63B0B4E5DA8064FA'
+    };
+
+    request.post({
+        url: url,
+        form: form
+        // headers: headers,
+        // timeout: 15000,
+        // encoding: null
+    },
+        function (error, response, data) {
+            // console.log("error: "+error);
+            if (!error && response.statusCode == 200) {
+
+                var buffer = new Buffer(data);
+                var encoding = response.headers['content-encoding'];
+                if (encoding == 'gzip') {
+                    zlib.gunzip(buffer, function (err, decoded) {
+                        //console.log("err: "+ err);
+                        callback(err && ('unzip error' + err), decoded && decoded.toString());
+                    });
+                } else if (encoding == 'deflate') {
+                    zlib.inflate(buffer, function (err, decoded) {
+                        callback(err && ('deflate error' + err), decoded && decoded.toString());
+                    })
+                } else {
+
+                    callback(null, buffer.toString());
+                }
+            }
+            else {
+                //小于错误次数则重试
+                if (retry < 3) {
+                    logger.log("retry getting url : " + url);
+                    setTimeout(function () {
+                        self.getContent(url, form, callback, retry + 1);
+                    }, 3000);
+
+                }
+                else
+                    callback(error || response.statusCode);
+            }
+        });
+}
+
 //将json写入文件文件
 exports.saveJson = function (fileLocation, json, callback) {
     fs.writeFile(fileLocation, JSON.stringify(json), (err) => {

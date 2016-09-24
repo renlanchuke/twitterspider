@@ -6,6 +6,7 @@ var logger = require('./logger');
 var getIds = require('./getTwitterId');
 var getTwitFP = require("./getTwitterFromPage")
 var getTwitters = require('./getTwitterFromId');
+var getArticles = require('./getArticlesFromAppleNews')
 var exec = require("child_process").exec;
 var spawn = require("child_process").spawn;
 var net = require("net")
@@ -13,9 +14,10 @@ var http_proxy = "http://127.0.0.1:8787"
 
 checkHttpProxy(function () {
     checkDatabase(function () {
-        getTwitFP.getTwitters('twitters_0107_0116');
+        //getTwitFP.getTwitters('twitters_0107_0116');
         //getTwitters.getTwitter('testId', 'testTwitters');
         //getTwitters.getTwitter('testId', '1214_1222_Twitters');
+        getArticles.getArticles();
     })
 })
 
@@ -72,6 +74,9 @@ function checkHttpProxy(next) {
             logger.log("无法启动代理");
         }
     }, function () {
-        next();
+        exec('export http_proxy=' + http_proxy, (err, stdout, stderr) => {
+            if (err) throw err;
+            next();
+        })
     })
 }
