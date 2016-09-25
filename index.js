@@ -7,6 +7,7 @@ var getIds = require('./getTwitterId');
 var getTwitFP = require("./getTwitterFromPage")
 var getTwitters = require('./getTwitterFromId');
 var getArticles = require('./getArticlesFromAppleNews')
+var getArticleCont = require('./getArticleContent')
 var exec = require("child_process").exec;
 var spawn = require("child_process").spawn;
 var net = require("net")
@@ -17,12 +18,10 @@ checkHttpProxy(function () {
         //getTwitFP.getTwitters('twitters_0107_0116');
         //getTwitters.getTwitter('testId', 'testTwitters');
         //getTwitters.getTwitter('testId', '1214_1222_Twitters');
-        getArticles.getArticles();
+        // getArticles.getArticles("articels");
+        getArticleCont.getArticle("articels", null);
     })
 })
-
-
-
 
 
 

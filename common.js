@@ -21,14 +21,14 @@ exports.get = function (url, cookie, callback, retry) {
         'Accept-Language': 'zh-CN',
         'User-Agent': 'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; WOW64; Trident/6.0)',
         'Connection': 'Keep-Alive',
-        'Accept-Encoding': 'gzip,deflate',
-        'auth_token': '778DF829AAD63C67ED4CC77F63B0B4E5DA8064FA'
+        'Accept-Encoding': 'gzip,deflate'
+       
     };
 
     request({
         url: url,
         headers: headers,
-        timeout: 3000,
+        timeout: 5000,
         encoding: null
     },
         function (error, response, data) {
