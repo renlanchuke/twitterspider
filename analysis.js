@@ -6,7 +6,8 @@ var json2csv = require('json2csv');
 
 
 // saveJson();
-saveJson2csv();
+saveJson2csv("articelsContent", "AppleNewArticels");
+
 function test() {
     mongo.init(function (err) {
         if (err) throw err;
@@ -64,7 +65,7 @@ function saveJson() {
     });
 }
 
-function saveJson2csv() {
+function twitter_saveJson2csv() {
     mongo.init(function (err) {
         if (err) throw err;
 
@@ -83,8 +84,42 @@ function saveJson2csv() {
                 );
             }, this);
 
-            var fields = ['user','text','date'];
+            var fields = ['user', 'text', 'date'];
             common.saveJson2csv('twitters_1214_1221.csv', jsonSimp, fields, (err) => {
+                if (err) throw err;
+            });
+
+            mongo.stop();
+        });
+
+    });
+}
+
+
+function saveJson2csv(collection, fileName) {
+    mongo.init(function (err) {
+        if (err) throw err;
+
+        mongo.findAll(collection, {}, (err, docs) => {
+            if (err) throw err;
+
+            // var jsonSimp = new Array();
+
+            // docs.forEach(function (element) {
+            //     jsonSimp.push(
+            //         {
+            //             'user': element.userName,
+            //             'text': element.content,
+            //             'date': element.time
+            //         }
+            //     );
+            // }, this);
+            var fields = [];
+            for (property in docs[0]) {
+                fields.push(property)
+            }
+
+            common.saveJson2csv(fileName + '.csv', docs, fields, (err) => {
                 if (err) throw err;
             });
 

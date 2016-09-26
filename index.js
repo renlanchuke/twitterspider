@@ -19,7 +19,7 @@ checkHttpProxy(function () {
         //getTwitters.getTwitter('testId', 'testTwitters');
         //getTwitters.getTwitter('testId', '1214_1222_Twitters');
         // getArticles.getArticles("articels");
-        getArticleCont.getArticle("articels", null);
+        getArticleCont.getArticle("articels", "articelsContent");
     })
 })
 
