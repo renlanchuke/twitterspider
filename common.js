@@ -11,7 +11,7 @@ var json2csv = require('json2csv')
 
 //////////////////网络访问部分
 
-var maxretry = 3;//请求如果出错的话，最大重试次数
+var maxretry = 5;//请求如果出错的话，最大重试次数
 
 //使用cookie访问页面
 exports.get = function (url, cookie, callback, retry) {

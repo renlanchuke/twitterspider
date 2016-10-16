@@ -127,7 +127,8 @@ var request = require('request')
 /**************
  * 测试gerDateArray function
  * ***************** */
-var dateArray = common.getDateArray('2015-01-20', '2015-03-1');
+var dateArray = common.getDateArray('2015-01-20', '2015-01-21');
 console.log(dateArray);
+console.log(dateArray.length)
 
 

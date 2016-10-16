@@ -15,11 +15,11 @@ var http_proxy = "http://127.0.0.1:8787"
 
 checkHttpProxy(function () {
     checkDatabase(function () {
-        //getTwitFP.getTwitters('twitters_0107_0116');
+        getTwitFP.getTwitters('twitters_byday');
         //getTwitters.getTwitter('testId', 'testTwitters');
         //getTwitters.getTwitter('testId', '1214_1222_Twitters');
         // getArticles.getArticles("articels");
-        getArticleCont.getArticle("articels", "articelsContent");
+        //getArticleCont.getArticle("articels", "articelsContent");
     })
 })
 
