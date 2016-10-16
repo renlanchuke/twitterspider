@@ -111,15 +111,23 @@ var request = require('request')
 //     }
 // })
 
-var article = {
-    id: 23,
-    date: 4,
-    h1: 32,
-    h2: 12,
-    content: 123,
-    url: 123
-};
+// var article = {
+//     id: 23,
+//     date: 4,
+//     h1: 32,
+//     h2: 12,
+//     content: 123,
+//     url: 123
+// };
 
-for (i in article) {
-    console.log(i)
-}
+// for (i in article) {
+//     console.log(i)
+// }
+
+/**************
+ * 测试gerDateArray function
+ * ***************** */
+var dateArray = common.getDateArray('2015-01-20', '2015-03-1');
+console.log(dateArray);
+
+
