@@ -34,7 +34,7 @@ exports.getTwitter = function (IdColl, twitterColl) {
     mongo.init(function (err) {
         if (err) throw err;
 
-        mongo.findAll(IdCollection, { download: false }, (err, docs) => {
+        mongo.findAll(IdCollection, { tag: false }, (err, docs) => {
             if (err) throw err;
             var length = docs.length;
             console.log('docs length: ', length);
@@ -47,7 +47,7 @@ exports.getTwitter = function (IdColl, twitterColl) {
 
 function getTwitter(cur, docs, len) {
     if (cur < len) {
-        var id = docs[cur].twitter_id;
+        var id = docs[cur].id;
         twit.get('statuses/show/:id', { id: id }, function (err, data, response) {
 
             if (err) {
@@ -60,8 +60,8 @@ function getTwitter(cur, docs, len) {
                 mongo.insertOne(twitterCollection, data, (err, result) => {
                     if (err) throw err;
                     mongo.updateOne(IdCollection,
-                        { "twitter_id": id },
-                        { "download": true },
+                        { "id": id },
+                        { "tag": true },
                         (err, result, filter) => {
                             if (err) throw err;
                             console.log('成功获取第' + cur + '条数据');

@@ -7,7 +7,7 @@ var json2csv = require('json2csv');
 
 // saveJson();
 //saveJson2csv("twitters_byday", "twittes_1017");
-filterTwitter("twitters_byday", "twittes_1017");
+filterTwitter("twitters_byday", "twitters_filter");
 
 function test() {
     mongo.init(function (err) {
@@ -132,7 +132,7 @@ function saveJson2csv(collection, fileName) {
 
 
 //筛除用户是新闻机构的twitter
-function filterTwitter(collection, fileName) {
+function filterTwitter(collection, collection2) {
     mongo.init(function (err) {
         if (err) throw err;
 
@@ -154,12 +154,17 @@ function filterTwitter(collection, fileName) {
                 }
 
             }
-            
-            common.saveJson2csv(fileName + '.csv', filterDocs, fields, (err) => {
+
+            // common.saveJson2csv(fileName + '.csv', filterDocs, fields, (err) => {
+            //     if (err) throw err;
+            // });
+
+            mongo.insertMany(collection2, filterDocs, (err, result) => {
                 if (err) throw err;
+                logger.log('成功插入' + result.insertedCount + '条数据');
+                mongo.stop();
             });
 
-            mongo.stop();
         });
 
     });

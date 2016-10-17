@@ -3,6 +3,7 @@ var common = require('./common');
 var Twit = require('twit');
 var net = require('net')
 var request = require('request')
+var config=require('./config')
 
 /********
  * 数据库测试
@@ -65,10 +66,10 @@ var request = require('request')
  * 测试twitt
  * ************** */
 // var T = new Twit({
-//     consumer_key: "**********", consumer_secret: "****", app_only_auth: true
+//     consumer_key:config.consumer_key, consumer_secret: config.consumer_secret, app_only_auth: true
 // });
 
-// T.get('statuses/show/:id', { id: '688517798804496384' }, function (err, data, response) {
+// T.get('statuses/show/:id', { id: '683435094720311297' }, function (err, data, response) {
 
 //     if (err) {
 //         console.log(err);
@@ -131,9 +132,9 @@ var request = require('request')
 // console.log(dateArray);
 // console.log(dateArray.length)
 
-var string1 = "新闻工作者";
-var string2="新聞工作者";
-var string3="新文闻心闻新1聞"
-console.log(/(新聞)|(新闻)/.test(string1));
-console.log(/新聞|新闻/.test(string2));
-console.log(/新聞|新闻/.test(string3));
+// var string1 = "新闻工作者";
+// var string2="新聞工作者";
+// var string3="新文闻心闻新1聞"
+// console.log(/(新聞)|(新闻)/.test(string1));
+// console.log(/新聞|新闻/.test(string2));
+// console.log(/新聞|新闻/.test(string3));
