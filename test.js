@@ -127,8 +127,13 @@ var request = require('request')
 /**************
  * 测试gerDateArray function
  * ***************** */
-var dateArray = common.getDateArray('2015-01-20', '2015-01-21');
-console.log(dateArray);
-console.log(dateArray.length)
+// var dateArray = common.getDateArray('2015-01-20', '2015-01-21');
+// console.log(dateArray);
+// console.log(dateArray.length)
 
-
+var string1 = "新闻工作者";
+var string2="新聞工作者";
+var string3="新文闻心闻新1聞"
+console.log(/(新聞)|(新闻)/.test(string1));
+console.log(/新聞|新闻/.test(string2));
+console.log(/新聞|新闻/.test(string3));

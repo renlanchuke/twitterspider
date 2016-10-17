@@ -6,7 +6,8 @@ var json2csv = require('json2csv');
 
 
 // saveJson();
-saveJson2csv("articelsContent", "AppleNewArticels");
+//saveJson2csv("twitters_byday", "twittes_1017");
+filterTwitter("twitters_byday", "twittes_1017");
 
 function test() {
     mongo.init(function (err) {
@@ -120,6 +121,41 @@ function saveJson2csv(collection, fileName) {
             }
 
             common.saveJson2csv(fileName + '.csv', docs, fields, (err) => {
+                if (err) throw err;
+            });
+
+            mongo.stop();
+        });
+
+    });
+}
+
+
+//筛除用户是新闻机构的twitter
+function filterTwitter(collection, fileName) {
+    mongo.init(function (err) {
+        if (err) throw err;
+
+        mongo.findAll(collection, {}, (err, docs) => {
+            if (err) throw err;
+
+            var fields = [];
+            for (property in docs[0]) {
+                fields.push(property)
+            }
+            var filterDocs = [];
+
+            for (var index in docs) {
+                if (!/新聞|新闻|報|網|网|媒體|之聲|觀察|中文网|週刊|中國|電台|中国|论坛|电台|黨|视频|社/.test(docs[index].userName)) {
+                    // console.log(docs[index]);
+                    filterDocs.push(docs[index]);
+                } else {
+
+                }
+
+            }
+            
+            common.saveJson2csv(fileName + '.csv', filterDocs, fields, (err) => {
                 if (err) throw err;
             });
 
