@@ -51,10 +51,22 @@ function getTwitter(cur, docs, len) {
         twit.get('statuses/show/:id', { id: id }, function (err, data, response) {
 
             if (err) {
-                logger.log(err);
-                setTimeout(function () {
-                    getTwitter(cur, docs, len);
-                }, 10000);
+                if (/(Rate)/.test(err.message)) {
+                    logger.log(err);
+                    setTimeout(function () {
+                        getTwitter(cur, docs, len);
+                    }, 60000);
+                } else if (/(ETIMEDOUT)/.test(err.message)) {
+                    logger.log(err);
+                    setTimeout(function () {
+                        getTwitter(cur, docs, len);
+                    }, 6000);
+                } else {
+                    logger.log(err)
+                    var nextCursor = cursor.getCursor();
+                    getTwitter(nextCursor, docs, len);
+                }
+
 
             } else {
                 mongo.insertOne(twitterCollection, data, (err, result) => {

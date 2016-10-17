@@ -7,7 +7,8 @@ var json2csv = require('json2csv');
 
 // saveJson();
 //saveJson2csv("twitters_byday", "twittes_1017");
-filterTwitter("twitters_byday", "twitters_filter");
+//filterTwitter("twitters_byday", "twitters_filter");
+twitter_saveJson2csv('twitters_api', 'twitters_api')
 
 function test() {
     mongo.init(function (err) {
@@ -66,27 +67,48 @@ function saveJson() {
     });
 }
 
-function twitter_saveJson2csv() {
+function twitter_saveJson2csv(collName, fileName) {
     mongo.init(function (err) {
         if (err) throw err;
 
-        mongo.findAll('twitters_1214_1222', {}, (err, docs) => {
+        mongo.findAll(collName, {}, (err, docs) => {
             if (err) throw err;
 
             var jsonSimp = new Array();
-
+            var fields = ['user', 'location', 'date', 'text'];
             docs.forEach(function (element) {
                 jsonSimp.push(
                     {
-                        'user': element.userName,
-                        'text': element.content,
-                        'date': element.time
+                        'user': element.user.name,
+                        'location': element.user.location,
+                        'date': new Date(element.created_at).format('yyyy-MM-dd'),
+                        'text': element.text,
+                        'retweeted': element.retweeted
                     }
                 );
             }, this);
 
-            var fields = ['user', 'text', 'date'];
-            common.saveJson2csv('twitters_1214_1221.csv', jsonSimp, fields, (err) => {
+
+            //按日期排序
+            var index = [];
+            for (i in jsonSimp) {
+                index[i] = new String(jsonSimp[i].date);
+                index[i]._obj = jsonSimp[i]
+
+            }
+            index.sort()
+            var jsonSimpSorted = [];
+            for (i in index) {
+                index[i]._obj.text = index[i]._obj.text.replace(/http(s){0,1}:\/\/[a-zA-Z0-9\-.]+(?::(\d+))?(?:(?:\/[a-zA-Z0-9\-._?,'+\&%$=~*!():@\\]*)+)?/g, "");
+                if (index[i]._obj.text.length >= 60 && index[i]._obj.retweeted == false) (
+                    jsonSimpSorted.push(index[i]._obj)
+                )
+
+            }
+
+
+
+            common.saveJson2csv(fileName + '.csv', jsonSimpSorted, fields, (err) => {
                 if (err) throw err;
             });
 

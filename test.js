@@ -3,7 +3,7 @@ var common = require('./common');
 var Twit = require('twit');
 var net = require('net')
 var request = require('request')
-var config=require('./config')
+var config = require('./config')
 
 /********
  * 数据库测试
@@ -138,3 +138,25 @@ var config=require('./config')
 // console.log(/(新聞)|(新闻)/.test(string1));
 // console.log(/新聞|新闻/.test(string2));
 // console.log(/新聞|新闻/.test(string3));
+
+//对象排序
+// function obj(id, value) {
+//     this.id = id
+//     this.value = value
+// }
+
+// var testArray = new Array();
+// testArray.push(new obj(12, "2016-01-11"));
+// testArray.push(new obj(1, "2016-01-09"));
+// testArray.push(new obj(12313, "2016-01-10"));
+// testArray.push(new obj(123, "2016-01-15"));
+// console.log(testArray)
+// testArray.sort((a, b) => {
+//     return a.value > b.value
+// })
+
+// console.log(testArray);
+
+var string1 = "传蔡英文拥有英国国籍 伦敦市中心有豪宅(图) https://t.co/R3MxNCftZh https://t.co/QXSLN2rSlW";
+string1 = string1.replace(/http(s){0,1}:\/\/[a-zA-Z0-9\-.]+(?::(\d+))?(?:(?:\/[a-zA-Z0-9\-._?,'+\&%$=~*!():@\\]*)+)?/g, "")
+console.log(string1)
