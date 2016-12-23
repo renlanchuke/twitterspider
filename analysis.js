@@ -9,6 +9,7 @@ var json2csv = require('json2csv');
 //saveJson2csv("twitters_byday", "twittes_1017");
 //filterTwitter("twitters_byday", "twitters_filter");
 twitter_saveJson2csv('twitters_api', 'twitters_api')
+//twitter_usercsv('twitters_api', 'user_info')
 
 function test() {
     mongo.init(function (err) {
@@ -67,6 +68,68 @@ function saveJson() {
     });
 }
 
+//analysis users of twitter
+function twitter_usercsv(collName, fileName) {
+    mongo.init(function (err) {
+        if (err) throw err;
+
+        mongo.findAll(collName, {}, (err, docs) => {
+            if (err) throw err;
+
+            var newDocs = new Array();
+            var jsonSimp = new Array();
+            var temArray = new Array();
+            var fields = ['id', 'name', 'location', 'followers_count', 'friends_count', 'listed_count',
+                'created_at', 'favourites_count', 'time_zone', 'verified', 'statuses_count', 'twitters_count'];
+
+            //filters docs
+            for (i in docs) {
+                docs[i].text = docs[i].text.replace(/http(s){0,1}:\/\/[a-zA-Z0-9\-.]+(?::(\d+))?(?:(?:\/[a-zA-Z0-9\-._?,'+\&%$=~*!():@\\]*)+)?/g, "");
+                if (docs[i].text.length >= 60 && docs[i].retweeted == false) (
+                    newDocs.push(docs[i])
+                )
+
+            }
+            console.log(newDocs.length);
+
+            newDocs.forEach(function (element) {
+                if (temArray.indexOf(element.user.id) == -1) {
+                    temArray.push(element.user.id)
+                    var twits_count = 0;
+                    for (index in docs) {
+                        if (element.user.id == docs[index].user.id)
+                            twits_count++;
+                    }
+                    jsonSimp.push(
+                        {
+                            'id': element.user.id,
+                            'name': element.user.name,
+                            'location': element.user.location,
+                            'followers_count': element.user.followers_count,
+                            'friends_count': element.user.friends_count,
+                            'listed_count': element.user.listed_count,
+                            'created_at': element.user.created_at,
+                            'favourites_count': element.user.favourites_count,
+                            'time_zone': element.user.time_zone,
+                            'verified': element.user.verified,
+                            'statuses_count': element.user.statuses_count,
+                            'twitters_count': twits_count
+                        }
+                    );
+                }
+
+            }, this);
+
+            common.saveJson2csv(fileName + '.csv', jsonSimp, fields, (err) => {
+                if (err) throw err;
+            });
+
+            mongo.stop();
+        });
+
+    });
+}
+
 function twitter_saveJson2csv(collName, fileName) {
     mongo.init(function (err) {
         if (err) throw err;
@@ -75,7 +138,7 @@ function twitter_saveJson2csv(collName, fileName) {
             if (err) throw err;
 
             var jsonSimp = new Array();
-            var fields = ['user', 'location', 'date', 'text'];
+            var fields = ['user', 'location', 'date', 'text', 'urls'];
             docs.forEach(function (element) {
                 jsonSimp.push(
                     {
@@ -83,7 +146,8 @@ function twitter_saveJson2csv(collName, fileName) {
                         'location': element.user.location,
                         'date': new Date(element.created_at).format('yyyy-MM-dd'),
                         'text': element.text,
-                        'retweeted': element.retweeted
+                        'retweeted': element.retweeted,
+                        'urls': element.entities.urls
                     }
                 );
             }, this);
@@ -111,6 +175,8 @@ function twitter_saveJson2csv(collName, fileName) {
             common.saveJson2csv(fileName + '.csv', jsonSimpSorted, fields, (err) => {
                 if (err) throw err;
             });
+
+            //get user information
 
             mongo.stop();
         });
