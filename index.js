@@ -16,7 +16,7 @@ var http_proxy = "http://127.0.0.1:8787"
 checkHttpProxy(function () {
     checkDatabase(function () {
         //getTwitFP.getTwitters('twitters_byday');
-        getTwitters.getTwitter('twitters_filter', 'twitters_api');
+        getTwitters.getTwitter('twitters_byday', 'twitters_api_all');
         // getArticles.getArticles("articels");
         //getArticleCont.getArticle("articels", "articelsContent");
 
@@ -60,7 +60,7 @@ function checkDatabase(next) {
 }
 
 function checkHttpProxy(next) {
-    isPortOccupied(8787, function () {
+    isPortOccupied(38928, function () {
         //打开lantern
         var http_proxy_child = spawn('lantern')
         if (http_proxy_child) {

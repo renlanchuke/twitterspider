@@ -8,7 +8,7 @@ var json2csv = require('json2csv');
 // saveJson();
 //saveJson2csv("twitters_byday", "twittes_1017");
 //filterTwitter("twitters_byday", "twitters_filter");
-twitter_saveJson2csv('twitters_api', 'twitters_api')
+twitter_saveJson2csv('twitters_api_all', 'twitters_api_all')
 //twitter_usercsv('twitters_api', 'user_info')
 
 function test() {
@@ -138,15 +138,34 @@ function twitter_saveJson2csv(collName, fileName) {
             if (err) throw err;
 
             var jsonSimp = new Array();
-            var fields = ['user', 'location', 'date', 'text', 'urls'];
+            var temArray = new Array();
+            var fields = ['user_id', 'name', 'location', 'followers_count', 'friends_count', 'listed_count',
+                'created_at', 'favourites_count', 'time_zone', 'verified', 'statuses_count', 'twitters_count',
+                'date', 'text', 'retweeted', 'retweet_count', 'urls'];
             docs.forEach(function (element) {
+                var twits_count = 0;
+                for (index in docs) {
+                    if (element.user.id == docs[index].user.id)
+                        twits_count++;
+                }
                 jsonSimp.push(
                     {
-                        'user': element.user.name,
+                        'user_id': element.user.id,
+                        'name': element.user.name,
                         'location': element.user.location,
+                        'followers_count': element.user.followers_count,
+                        'friends_count': element.user.friends_count,
+                        'listed_count': element.user.listed_count,
+                        'created_at': element.user.created_at,
+                        'favourites_count': element.user.favourites_count,
+                        'time_zone': element.user.time_zone,
+                        'verified': element.user.verified,
+                        'statuses_count': element.user.statuses_count,
+                        'twitters_count': twits_count,
                         'date': new Date(element.created_at).format('yyyy-MM-dd'),
                         'text': element.text,
                         'retweeted': element.retweeted,
+                        'retweet_count': element.retweet_count,
                         'urls': element.entities.urls
                     }
                 );
@@ -164,10 +183,10 @@ function twitter_saveJson2csv(collName, fileName) {
             var jsonSimpSorted = [];
             for (i in index) {
                 index[i]._obj.text = index[i]._obj.text.replace(/http(s){0,1}:\/\/[a-zA-Z0-9\-.]+(?::(\d+))?(?:(?:\/[a-zA-Z0-9\-._?,'+\&%$=~*!():@\\]*)+)?/g, "");
-                if (index[i]._obj.text.length >= 60 && index[i]._obj.retweeted == false) (
-                    jsonSimpSorted.push(index[i]._obj)
-                )
-
+                // if (index[i]._obj.text.length >= 60 && index[i]._obj.retweeted == false) (
+                //     jsonSimpSorted.push(index[i]._obj)
+                // )
+                jsonSimpSorted.push(index[i]._obj)
             }
 
 
